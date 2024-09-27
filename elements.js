@@ -83,3 +83,6 @@ function handleChoice(choiceIndex) {
 
 // 시작 버튼 클릭 이벤트 리스너 등록
 document.getElementById("start-button").addEventListener("click", startButtonClickHandler);
+
+
+//아아아
