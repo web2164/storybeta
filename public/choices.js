@@ -94,7 +94,7 @@ async function handleChoice(choiceIndex) {
 
         await delay(1000);
         
-        const choices = await fetchData("다음 스토리 선택지를 20자 이하로 4개 생성해 주세요.");
+        const choices = await fetchData("방금 생성된 스토리와 잘 이어지는 선택지를 20자 이하로 4개 생성해 주세요.");
         const choicesList = choices ? choices.split('\n').filter(choice => choice) : ['다시 시도해주세요.'];
 
         updateStoryOutput(nextStory, choicesList);
@@ -112,10 +112,7 @@ function addStoryOutputButton() {
         // "처음으로" 버튼 추가
         const restartButton = document.createElement("button");
         restartButton.innerText = "처음으로";
-        restartButton.classList.add("choice-button");
-        restartButton.style.position = 'absolute'; 
-        restartButton.style.top = '10px';
-        restartButton.style.right = '10px';
+        restartButton.classList.add("restart-button");
         restartButton.addEventListener("click", () => {
             location.reload(); 
         });
@@ -147,7 +144,7 @@ document.getElementById("start-button").addEventListener("click", async () => {
     const storyOutput = document.getElementById("story-output");
     storyOutput.style.display = "block";
 
-    const intro = await fetchData(`동기: ${motivation}, 갈등: ${conflict}, 배경: ${setting}, 반전: ${twist}의 스토리 인트로를 100자 이내로 생성해 주세요.`);
+    const intro = await fetchData(`동기: ${motivation}, 갈등: ${conflict}, 배경: ${setting}, 반전: ${twist}의 자연스러운 스토리 인트로를 100자 이내로 생성해 주세요.`);
     
     if (!intro) {
         document.getElementById("story-content").innerHTML = '인트로를 불러올 수 없습니다.';
@@ -158,7 +155,7 @@ document.getElementById("start-button").addEventListener("click", async () => {
 
     await delay(1000);
     
-    const choices = await fetchData("다음 스토리 선택지를 20자 이하로 4개 생성해 주세요.");
+    const choices = await fetchData("방금 생성된 스토리와 잘 이어지는 선택지를 20자 이하로 4개 생성해 주세요.");
     const choicesList = choices ? choices.split('\n').filter(choice => choice) : ['다시 시도해주세요.'];
 
     updateStoryOutput(intro, choicesList);

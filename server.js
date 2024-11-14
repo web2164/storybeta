@@ -15,7 +15,7 @@ const __dirname = dirname(__filename);
 
 // Express 앱 초기화
 const app = express();
-const openaiApiKey = process.env.OPENAI_API_KEY;
+const openaiApiKey = process.env.DB_OPENAI_API_KEY;
 
 // CORS 및 JSON 요청 본문 파싱 미들웨어 설정
 app.use(cors({ origin: '*' }));
@@ -76,7 +76,7 @@ app.post('/api/generate', async (req, res) => {
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 // 서버 실행
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {
     console.log(`서버가 http://localhost:${PORT}에서 실행 중입니다.`);
 });

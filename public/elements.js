@@ -51,13 +51,6 @@ function startStory() {
     // 첫 스토리와 선택지 초기화
     storyContent.innerHTML = "스토리가 시작됩니다..."; 
     choicesContainer.innerHTML = '';
-
-    // 예시 선택지 추가
-    const exampleChoices = ["선택지 1", "선택지 2", "선택지 3", "선택지 4"];
-    exampleChoices.forEach((choice, index) => {
-        const button = createChoiceButton(choice, index);
-        choicesContainer.appendChild(button);
-    });
 }
 
 // 선택지 버튼 생성 함수
