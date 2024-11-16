@@ -4,6 +4,12 @@
     box-sizing: border-box;
 }
 
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden; /* 수평 스크롤바 제거 */
+}
+
 body {
     font-family: Arial, sans-serif;
     display: flex;
