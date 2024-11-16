@@ -114,3 +114,121 @@ select {
 .restart-button:hover {
     background-color: #0056b3;
 }
+.fixed-buttons {
+    position: fixed;
+    top: 10px;
+    left: 10px; /* 좌측 상단 배치 */
+    display: flex; /* Flexbox 적용 */
+    flex-direction: row; /* 가로 방향 정렬 */
+    gap: 10px; /* 버튼 간 간격 */
+    z-index: 1000;
+    margin: 0;
+}
+
+html {
+    margin-right: 100px; /* 버튼이 위치할 공간 확보 */
+}
+
+.fixed-buttons button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s;
+}
+
+.fixed-buttons button:hover {
+    background-color: #0056b3;
+}
+
+#story-output {
+    width: 900px;
+    height: 600px; /* 고정된 높이 */
+    padding: 30px;
+    background-color: black;
+    color: white;
+    overflow-y: auto; /* 스크롤 활성화 */
+    border-radius: 10px;
+    text-align: left;
+    display: none; /* 초기에는 숨김 */
+}
+
+/* 모달 창 스타일 */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 120%; 
+    max-width: 750px; 
+    max-height: 120%;
+    overflow-y: auto;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.modal-content input,
+.modal-content textarea {
+    width: 100%;
+    margin-bottom: 15px;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.modal-content textarea {
+    width: 100%;
+    height: 300px; 
+    resize: vertical; /* 사용자가 수직으로 크기 조정 가능 */
+    margin-bottom: 15px;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.submit-button,
+.close-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.submit-button {
+    background-color: #007BFF;
+    color: white;
+    margin-right: 10px; /* 닫기 버튼과 간격 */
+
+}
+
+.submit-button:hover {
+    background-color: #0056b3;
+}
+
+.close-button {
+    background-color: #d9534f;
+    color: white;
+}
+
+.close-button:hover {
+    background-color: #c9302c;
+}

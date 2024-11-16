@@ -47,6 +47,29 @@ async function fetchData(prompt) {
     }
 }
 
+// 제목 생성 API 호출 함수
+async function fetchTitle(story) {
+    try {
+        const response = await fetch('/api/generate-title', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ story }),
+        });
+
+        if (!response.ok) {
+            throw new Error('제목 생성 요청 실패');
+        }
+
+        const data = await response.json();
+        return data.title;
+    } catch (error) {
+        console.error('제목 생성 중 오류:', error);
+        return '제목 생성 실패';
+    }
+}
+
 // 스토리 및 선택지 업데이트 함수
 function updateStoryOutput(story, choices) {
     const storyContent = document.getElementById("story-content");
@@ -84,7 +107,7 @@ async function handleChoice(choiceIndex) {
         document.getElementById("choices-container").style.display = "none";
 
         // 결말을 전체 스토리에 추가하고 출력 버튼을 생성
-        fullStory += ending + "<br>"; 
+        fullStory += ending ; 
         addStoryOutputButton();
     } else {
         await delay(1000);
@@ -106,8 +129,18 @@ function addStoryOutputButton() {
     const outputButton = document.createElement("button");
     outputButton.innerText = "스토리 출력";
     outputButton.classList.add("choice-button");
-    outputButton.addEventListener("click", () => {
-        document.getElementById("story-output").innerHTML = fullStory; // 전체 스토리 출력
+    outputButton.addEventListener("click", async () => {
+        // 제목 생성
+        const title = await fetchTitle(fullStory);
+
+        // 전체 스토리와 제목 출력
+        document.getElementById("story-output").innerHTML = `
+            <h1>${title}</h1>
+            <p>${fullStory}</p>
+        `;
+
+        // 공유하기 버튼 생성
+        setupShareButton(title, fullStory);
 
         // "처음으로" 버튼 추가
         const restartButton = document.createElement("button");
@@ -119,6 +152,23 @@ function addStoryOutputButton() {
         document.body.appendChild(restartButton);
     });
     document.getElementById("story-content").appendChild(outputButton);
+}
+
+// 공유하기 버튼 추가 함수
+function setupShareButton(title, content) {
+    const shareButton = document.createElement("button");
+    shareButton.innerText = "공유하기";
+    shareButton.classList.add("choice-button");
+    
+    shareButton.addEventListener("click", () => {
+        createPostModal(title, content); // 모달 창 생성 (editboard.js의 함수 호출)
+    });
+
+    // 최종 스토리 출력 하단에 공유하기 버튼 추가
+    const storyOutput = document.getElementById("story-output");
+    if (storyOutput) {
+        storyOutput.appendChild(shareButton);
+    }
 }
 
 // 시작 버튼 클릭 시 초기 스토리와 선택지 생성
@@ -151,7 +201,7 @@ document.getElementById("start-button").addEventListener("click", async () => {
         return;
     }
 
-    fullStory += intro + "<br>"; // 전체 스토리에 인트로 추가
+    fullStory += intro ; // 전체 스토리에 인트로 추가
 
     await delay(1000);
     

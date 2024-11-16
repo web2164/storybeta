@@ -4,7 +4,7 @@ const storyElementsData = [
     { label: '갈등', id: 'conflict', options: ['배신', '음모', '희생', '비극', '권력 투쟁'] },
     { label: '배경', id: 'setting', options: ['미래 도시', '중세 왕국', '사막', '우주선', '해저'] },
     { label: '반전', id: 'twist', options: ['숨겨진 배신자', '사실은 가짜', '시간여행', '숨겨진 능력', '미리 계획된 일'] },
-    { label: '분기 수', id: 'branchCount', options: ['4', '5', '6', '7', '8', '9'] }
+    { label: '분기 수', id: 'branchCount', options: ['1', '5', '6', '7', '8', '9'] }
 ];
 
 // 요소 선택 생성 함수
