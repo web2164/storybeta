@@ -50,7 +50,7 @@ function createPostModal(title, content) {
     contentInput.value = content;
     contentInput.placeholder = "게시물 내용";
     contentInput.classList.add("content-input");
-    contentInput.disabled = true; // 내용 수정 불가
+    // contentInput.disabled = true; // 내용 수정 불가
 
     // 확인 버튼
     const submitButton = document.createElement("button");
