@@ -3,7 +3,6 @@ import dotenv from 'dotenv';
 import fetch from 'node-fetch';
 import cors from 'cors';
 import sqlite3 from 'sqlite3'; // SQLite3 모듈 추가
-import bcrypt from 'bcrypt'; // bcrypt 모듈 추가
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import routes from './routes.js'; // 새로운 파일 가져오기
@@ -126,7 +125,7 @@ app.post('/api/generate-title', async (req, res) => {
 });
 
 // 게시물 등록 API
-app.post("/api/submit-post", async (req, res) => {
+app.post("/api/submit-post", (req, res) => {
     const { title, content, author, password, timestamp } = req.body;
 
     if (!title || !content || !author || !password) {
@@ -134,11 +133,10 @@ app.post("/api/submit-post", async (req, res) => {
     }
 
     try {
-        const hashedPassword = await bcrypt.hash(password, 10); // 비밀번호 해싱
         const db = new sqlite3.Database("./public/stories.db");
         db.run(
             "INSERT INTO posts (title, content, author, password, timestamp) VALUES (?, ?, ?, ?, ?)",
-            [title, content, author, hashedPassword, timestamp],
+            [title, content, author, password, timestamp],
             function (err) {
                 if (err) {
                     console.error(err);
@@ -206,45 +204,37 @@ app.post("/api/delete-post/:id", (req, res) => {
         return res.status(400).json({ success: false, message: "비밀번호가 필요합니다." });
     }
 
-    const db = new sqlite3.Database("./public/stories.db"); // 데이터베이스 열기
-
-    db.get("SELECT password FROM posts WHERE id = ?", [postId], (err, row) => {
-        if (err) {
-            console.error("DB 조회 오류:", err);
-            return res.status(500).json({ success: false, message: "DB 오류 발생" });
-        }
-
-        if (!row) {
-            db.close(); // 작업 완료 후 데이터베이스 닫기
-            return res.status(404).json({ success: false, message: "게시물을 찾을 수 없습니다." });
-        }
-
-        // 비밀번호 확인
-        bcrypt.compare(password, row.password, (bcryptErr, isMatch) => {
-            if (bcryptErr) {
-                console.error("비밀번호 비교 오류:", bcryptErr);
-                db.close();
-                return res.status(500).json({ success: false, message: "서버 오류가 발생했습니다." });
+    try {
+        const db = new sqlite3.Database("./public/stories.db");
+        db.get("SELECT password FROM posts WHERE id = ?", [postId], (err, row) => {
+            if (err) {
+                console.error(err);
+                return res.status(500).json({ success: false, message: "DB 오류 발생" });
             }
 
-            if (!isMatch) {
-                db.close();
+            if (!row) {
+                return res.status(404).json({ success: false, message: "게시물을 찾을 수 없습니다." });
+            }
+
+            if (row.password !== password) {
                 return res.status(403).json({ success: false, message: "비밀번호가 일치하지 않습니다." });
             }
 
-            // 비밀번호가 일치하면 게시물 삭제
             db.run("DELETE FROM posts WHERE id = ?", [postId], (deleteErr) => {
-                db.close(); // 삭제 작업 완료 후 데이터베이스 닫기
-
                 if (deleteErr) {
-                    console.error("DB 삭제 오류:", deleteErr);
+                    console.error(deleteErr);
                     return res.status(500).json({ success: false, message: "DB 삭제 오류가 발생했습니다." });
                 }
 
                 res.status(200).json({ success: true, message: "게시물이 삭제되었습니다." });
             });
         });
-    });
+
+        db.close();
+    } catch (error) {
+        console.error("서버 오류 발생:", error);
+        res.status(500).json({ success: false, message: "서버 오류가 발생했습니다." });
+    }
 });
 
 // 대기 함수
